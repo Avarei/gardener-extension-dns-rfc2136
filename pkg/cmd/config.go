@@ -10,8 +10,8 @@ import (
 
 	"github.com/spf13/pflag"
 
-	"github.com/metal-stack/gardener-extension-dns-powerdns/pkg/apis/config"
-	configloader "github.com/metal-stack/gardener-extension-dns-powerdns/pkg/apis/config/loader"
+	"github.com/avarei/gardener-extension-dns-rfc2136/pkg/apis/config"
+	configloader "github.com/avarei/gardener-extension-dns-rfc2136/pkg/apis/config/loader"
 )
 
 // ConfigOptions are command line options that can be set for config.ControllerConfiguration.

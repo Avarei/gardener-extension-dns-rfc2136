@@ -21,7 +21,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 
-	"github.com/metal-stack/gardener-extension-dns-powerdns/pkg/powerdns"
+	"github.com/avarei/gardener-extension-dns-rfc2136/pkg/powerdns"
 )
 
 var (

@@ -12,7 +12,7 @@ import (
 	runtimelog "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/manager/signals"
 
-	"github.com/metal-stack/gardener-extension-dns-powerdns/cmd/gardener-extension-dns-powerdns/app"
+	"github.com/avarei/gardener-extension-dns-rfc2136/cmd/gardener-extension-dns-powerdns/app"
 )
 
 func main() {

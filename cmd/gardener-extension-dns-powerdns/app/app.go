@@ -22,9 +22,9 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/healthz"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 
-	pdnscmd "github.com/metal-stack/gardener-extension-dns-powerdns/pkg/cmd"
-	pdnsdnsrecord "github.com/metal-stack/gardener-extension-dns-powerdns/pkg/controller/dnsrecord"
-	"github.com/metal-stack/gardener-extension-dns-powerdns/pkg/powerdns"
+	pdnscmd "github.com/avarei/gardener-extension-dns-rfc2136/pkg/cmd"
+	pdnsdnsrecord "github.com/avarei/gardener-extension-dns-rfc2136/pkg/controller/dnsrecord"
+	"github.com/avarei/gardener-extension-dns-rfc2136/pkg/powerdns"
 )
 
 // NewControllerManagerCommand creates a new command for running a PowerDNS provider controller.

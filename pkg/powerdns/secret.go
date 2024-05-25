@@ -15,7 +15,7 @@ import (
 	"k8s.io/utils/ptr"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	pdnsclient "github.com/metal-stack/gardener-extension-dns-powerdns/pkg/powerdns/client"
+	pdnsclient "github.com/avarei/gardener-extension-dns-rfc2136/pkg/powerdns/client"
 )
 
 // NewClientFromSecretRef creates a new Client from given k8s <secretRef>

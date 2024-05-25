@@ -8,4 +8,4 @@
 
 //go:generate ../../../hack/update-codegen.sh
 
-package config // import "github.com/metal-stack/gardener-extension-dns-powerdns/pkg/apis/config"
+package config // import "github.com/avarei/gardener-extension-dns-rfc2136/pkg/apis/config"

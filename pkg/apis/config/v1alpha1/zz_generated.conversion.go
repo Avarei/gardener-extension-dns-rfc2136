@@ -13,7 +13,7 @@ package v1alpha1
 import (
 	unsafe "unsafe"
 
-	config "github.com/metal-stack/gardener-extension-dns-powerdns/pkg/apis/config"
+	config "github.com/avarei/gardener-extension-dns-rfc2136/pkg/apis/config"
 	conversion "k8s.io/apimachinery/pkg/conversion"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	componentbaseconfig "k8s.io/component-base/config"

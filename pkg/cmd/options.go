@@ -10,7 +10,7 @@ import (
 	extensionsdnsrecordcontroller "github.com/gardener/gardener/extensions/pkg/controller/dnsrecord"
 	extensionsheartbeatcontroller "github.com/gardener/gardener/extensions/pkg/controller/heartbeat"
 
-	dnsrecordcontroller "github.com/metal-stack/gardener-extension-dns-powerdns/pkg/controller/dnsrecord"
+	dnsrecordcontroller "github.com/avarei/gardener-extension-dns-rfc2136/pkg/controller/dnsrecord"
 )
 
 // ControllerSwitchOptions are the controllercmd.SwitchOptions for the provider controllers.

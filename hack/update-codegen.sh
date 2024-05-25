@@ -19,17 +19,17 @@ PROJECT_ROOT=$(dirname $0)/..
 
 bash "${PROJECT_ROOT}"/vendor/k8s.io/code-generator/generate-internal-groups.sh \
   deepcopy,defaulter \
-  github.com/metal-stack/gardener-extension-dns-powerdns/pkg/client/componentconfig \
-  github.com/metal-stack/gardener-extension-dns-powerdns/pkg/apis \
-  github.com/metal-stack/gardener-extension-dns-powerdns/pkg/apis \
+  github.com/avarei/gardener-extension-dns-rfc2136/pkg/client/componentconfig \
+  github.com/avarei/gardener-extension-dns-rfc2136/pkg/apis \
+  github.com/avarei/gardener-extension-dns-rfc2136/pkg/apis \
   "config:v1alpha1" \
   --go-header-file "${PROJECT_ROOT}/hack/LICENSE_BOILERPLATE.txt"
 
 bash "${PROJECT_ROOT}"/vendor/k8s.io/code-generator/generate-internal-groups.sh \
   conversion \
-  github.com/metal-stack/gardener-extension-dns-powerdns/pkg/client/componentconfig \
-  github.com/metal-stack/gardener-extension-dns-powerdns/pkg/apis \
-  github.com/metal-stack/gardener-extension-dns-powerdns/pkg/apis \
+  github.com/avarei/gardener-extension-dns-rfc2136/pkg/client/componentconfig \
+  github.com/avarei/gardener-extension-dns-rfc2136/pkg/apis \
+  github.com/avarei/gardener-extension-dns-rfc2136/pkg/apis \
   "config:v1alpha1" \
-  --extra-peer-dirs=github.com/metal-stack/gardener-extension-dns-powerdns/pkg/apis/config,github.com/metal-stack/gardener-extension-dns-powerdns/pkg/apis/config/v1alpha1,k8s.io/apimachinery/pkg/apis/meta/v1,k8s.io/apimachinery/pkg/conversion,k8s.io/apimachinery/pkg/runtime \
+  --extra-peer-dirs=github.com/avarei/gardener-extension-dns-rfc2136/pkg/apis/config,github.com/avarei/gardener-extension-dns-rfc2136/pkg/apis/config/v1alpha1,k8s.io/apimachinery/pkg/apis/meta/v1,k8s.io/apimachinery/pkg/conversion,k8s.io/apimachinery/pkg/runtime \
   --go-header-file "${PROJECT_ROOT}/hack/LICENSE_BOILERPLATE.txt"

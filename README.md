@@ -1,6 +1,6 @@
 # Gardener Extension for PowerDNS
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/metal-stack/gardener-extension-dns-powerdns)](https://goreportcard.com/report/github.com/metal-stack/gardener-extension-dns-powerdns)
+[![Go Report Card](https://goreportcard.com/badge/github.com/avarei/gardener-extension-dns-rfc2136)](https://goreportcard.com/report/github.com/avarei/gardener-extension-dns-rfc2136)
 
 This project is a permanent fork of: [gardener-extension-provider-aws](https://github.com/gardener/gardener-extension-provider-aws)
 

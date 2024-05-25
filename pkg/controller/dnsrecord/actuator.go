@@ -21,8 +21,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
 
-	pdns "github.com/metal-stack/gardener-extension-dns-powerdns/pkg/powerdns"
-	pdnsclient "github.com/metal-stack/gardener-extension-dns-powerdns/pkg/powerdns/client"
+	pdns "github.com/avarei/gardener-extension-dns-rfc2136/pkg/powerdns"
+	pdnsclient "github.com/avarei/gardener-extension-dns-rfc2136/pkg/powerdns/client"
 )
 
 type actuator struct {

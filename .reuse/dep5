@@ -1,7 +1,7 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: gardener-extension-dns-powerdns
 Upstream-Contact: The Metal Stack project <info@metal-stack.io>
-Source: https://github.com/metal-stack/gardener-extension-dns-powerdns
+Source: https://github.com/avarei/gardener-extension-dns-rfc2136
 
 # --------------------------------------------------
 # source code

@@ -9,8 +9,8 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 
-	"github.com/metal-stack/gardener-extension-dns-powerdns/pkg/apis/config"
-	"github.com/metal-stack/gardener-extension-dns-powerdns/pkg/apis/config/v1alpha1"
+	"github.com/avarei/gardener-extension-dns-rfc2136/pkg/apis/config"
+	"github.com/avarei/gardener-extension-dns-rfc2136/pkg/apis/config/v1alpha1"
 )
 
 var (

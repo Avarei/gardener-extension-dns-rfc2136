@@ -1,6 +1,6 @@
 FROM golang:1.22 AS builder
 
-WORKDIR /go/src/github.com/metal-stack/gardener-extension-dns-powerdns
+WORKDIR /go/src/github.com/avarei/gardener-extension-dns-rfc2136
 
 COPY . .
 

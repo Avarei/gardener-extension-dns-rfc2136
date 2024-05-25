@@ -9,7 +9,7 @@ IMAGE_PREFIX                := $(REGISTRY)
 REPO_ROOT                   := $(shell dirname "$(realpath $(lastword $(MAKEFILE_LIST)))")
 HACK_DIR                    := $(REPO_ROOT)/hack
 HOSTNAME                    := $(shell hostname)
-LD_FLAGS                    := "-w -X github.com/metal-stack/gardener-extension-dns-powerdns/pkg/version.Version=$(IMAGE_TAG)"
+LD_FLAGS                    := "-w -X github.com/avarei/gardener-extension-dns-rfc2136/pkg/version.Version=$(IMAGE_TAG)"
 LEADER_ELECTION             := false
 IGNORE_OPERATION_ANNOTATION := false
 WEBHOOK_CONFIG_URL          := localhost
@@ -88,8 +88,8 @@ generate-in-container: revendor $(HELM)
 		--mount type=tmpfs,destination=/gocache,tmpfs-mode=1777 \
 		--user $$(id -u):$$(id -g) \
 		--userns=keep-id \
-		--volume $(PWD):/go/src/github.com/metal-stack/gardener-extension-dns-powerdns:z \
-		--workdir /go/src/github.com/metal-stack/gardener-extension-dns-powerdns \
+		--volume $(PWD):/go/src/github.com/avarei/gardener-extension-dns-rfc2136:z \
+		--workdir /go/src/github.com/avarei/gardener-extension-dns-rfc2136 \
 		golang:$(GO_VERSION) \
 		/usr/bin/make generate
 
