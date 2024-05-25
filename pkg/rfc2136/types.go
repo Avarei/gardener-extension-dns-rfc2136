@@ -2,7 +2,7 @@ package rfc2136
 
 const (
 	// Name of this Extension
-	Name = "rfc2136"
+	Name = "dns-rfc2136"
 
 	// Type is the type of resources managed by the RFC2136 actuator.
 	Type = "rfc2136"
