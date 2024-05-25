@@ -17,11 +17,10 @@ package dnsrecord
 import (
 	"context"
 
+	"github.com/avarei/gardener-extension-dns-rfc2136/pkg/rfc2136"
 	"github.com/gardener/gardener/extensions/pkg/controller/dnsrecord"
 	"sigs.k8s.io/controller-runtime/pkg/controller"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
-
-	"github.com/avarei/gardener-extension-dns-rfc2136/pkg/powerdns"
 )
 
 var (
@@ -44,7 +43,7 @@ func AddToManagerWithOptions(ctx context.Context, mgr manager.Manager, opts AddO
 		Actuator:          NewActuator(mgr),
 		ControllerOptions: opts.Controller,
 		Predicates:        dnsrecord.DefaultPredicates(ctx, mgr, opts.IgnoreOperationAnnotation),
-		Type:              powerdns.Type,
+		Type:              rfc2136.Type,
 	})
 }
 

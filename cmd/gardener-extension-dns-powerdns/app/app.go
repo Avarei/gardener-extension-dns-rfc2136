@@ -24,7 +24,11 @@ import (
 
 	pdnscmd "github.com/avarei/gardener-extension-dns-rfc2136/pkg/cmd"
 	pdnsdnsrecord "github.com/avarei/gardener-extension-dns-rfc2136/pkg/controller/dnsrecord"
-	"github.com/avarei/gardener-extension-dns-rfc2136/pkg/powerdns"
+)
+
+const (
+	// Name is the name of the Extension
+	Name = "rfc2136"
 )
 
 // NewControllerManagerCommand creates a new command for running a PowerDNS provider controller.
@@ -35,7 +39,7 @@ func NewControllerManagerCommand(ctx context.Context) *cobra.Command {
 		mgrOpts     = &controllercmd.ManagerOptions{
 			LeaderElection:             true,
 			LeaderElectionResourceLock: resourcelock.LeasesResourceLock,
-			LeaderElectionID:           controllercmd.LeaderElectionNameID(powerdns.Name),
+			LeaderElectionID:           controllercmd.LeaderElectionNameID(Name),
 			LeaderElectionNamespace:    os.Getenv("LEADER_ELECTION_NAMESPACE"),
 			HealthBindAddress:          ":8081",
 		}
@@ -48,7 +52,7 @@ func NewControllerManagerCommand(ctx context.Context) *cobra.Command {
 
 		// options for the heartbeat controller
 		heartbeatCtrlOpts = &heartbeatcmd.Options{
-			ExtensionName:        powerdns.Name,
+			ExtensionName:        Name,
 			RenewIntervalSeconds: 30,
 			Namespace:            os.Getenv("LEADER_ELECTION_NAMESPACE"),
 		}
@@ -70,7 +74,7 @@ func NewControllerManagerCommand(ctx context.Context) *cobra.Command {
 	)
 
 	cmd := &cobra.Command{
-		Use: fmt.Sprintf("%s-controller-manager", powerdns.Name),
+		Use: fmt.Sprintf("%s-controller-manager", Name),
 
 		RunE: func(cmd *cobra.Command, args []string) error {
 			verflag.PrintAndExitIfRequested()

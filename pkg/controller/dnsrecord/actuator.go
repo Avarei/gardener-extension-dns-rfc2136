@@ -9,6 +9,8 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/avarei/gardener-extension-dns-rfc2136/pkg/rfc2136"
+	rfc2136client "github.com/avarei/gardener-extension-dns-rfc2136/pkg/rfc2136/client"
 	extensionscontroller "github.com/gardener/gardener/extensions/pkg/controller"
 	"github.com/gardener/gardener/extensions/pkg/controller/dnsrecord"
 	gardencorev1beta1 "github.com/gardener/gardener/pkg/apis/core/v1beta1"
@@ -17,12 +19,8 @@ import (
 	extensionsv1alpha1helper "github.com/gardener/gardener/pkg/apis/extensions/v1alpha1/helper"
 	kutil "github.com/gardener/gardener/pkg/utils/kubernetes"
 	"github.com/go-logr/logr"
-	"github.com/joeig/go-powerdns/v3"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/manager"
-
-	pdns "github.com/avarei/gardener-extension-dns-rfc2136/pkg/powerdns"
-	pdnsclient "github.com/avarei/gardener-extension-dns-rfc2136/pkg/powerdns/client"
 )
 
 type actuator struct {
@@ -38,14 +36,13 @@ func NewActuator(mgr manager.Manager) dnsrecord.Actuator {
 
 // Reconcile reconciles the DNSRecord.
 func (a *actuator) Reconcile(ctx context.Context, log logr.Logger, dns *extensionsv1alpha1.DNSRecord, _ *extensionscontroller.Cluster) error {
-	// Create PowerDNS client
-	pdnsClient, err := pdns.NewClientFromSecretRef(ctx, a.client, dns.Spec.SecretRef)
+	dnsClient, err := rfc2136.NewClientFromSecretRef(ctx, a.client, dns.Spec.SecretRef)
 	if err != nil {
-		return fmt.Errorf("could not create PowerDNS client: %+v", err)
+		return fmt.Errorf("could not create dns client: %+v", err)
 	}
 
 	// Determine DNS hosted zone ID
-	zone, err := a.getZone(ctx, log, dns, pdnsClient)
+	zone, err := a.getZone(ctx, dns)
 	if err != nil {
 		return err
 	}
@@ -53,7 +50,7 @@ func (a *actuator) Reconcile(ctx context.Context, log logr.Logger, dns *extensio
 	// Create or update DNS recordset
 	ttl := extensionsv1alpha1helper.GetDNSRecordTTL(dns.Spec.TTL)
 	log.Info("Creating or updating DNS recordset", "zone", zone, "name", dns.Spec.Name, "type", dns.Spec.RecordType, "values", dns.Spec.Values, "dnsrecord", kutil.ObjectName(dns))
-	if err := pdnsClient.CreateOrUpdateDNSRecordSet(ctx, zone, dns.Spec.Name, powerdns.RRType(dns.Spec.RecordType), dns.Spec.Values, ttl); err != nil {
+	if err := dnsClient.CreateOrUpdate(ctx, zone, dns.Spec.Name, string(dns.Spec.RecordType), dns.Spec.Values, ttl); err != nil {
 		return fmt.Errorf("could not create or update DNS recordset in zone %s with name %s, type %s, and values %v: %w", zone, dns.Spec.Name, dns.Spec.RecordType, dns.Spec.Values, err)
 	}
 
@@ -61,7 +58,7 @@ func (a *actuator) Reconcile(ctx context.Context, log logr.Logger, dns *extensio
 	if dns.Status.LastOperation == nil || dns.Status.LastOperation.Type == gardencorev1beta1.LastOperationTypeCreate {
 		name, recordType := dnsrecord.GetMetaRecordName(dns.Spec.Name), "TXT"
 		log.Info("Deleting meta DNS recordset", "zone", zone, "name", name, "type", recordType, "dnsrecord", kutil.ObjectName(dns))
-		if err := pdnsClient.DeleteDNSRecordSet(ctx, zone, name, powerdns.RRType(recordType)); err != nil {
+		if err := dnsClient.Delete(ctx, zone, name, string(recordType), dns.Spec.Values); err != nil {
 			return fmt.Errorf("could not delete meta DNS recordset in zone %s with name %s and type %s: %w", zone, name, recordType, err)
 		}
 	}
@@ -74,21 +71,20 @@ func (a *actuator) Reconcile(ctx context.Context, log logr.Logger, dns *extensio
 
 // Delete deletes the DNSRecord.
 func (a *actuator) Delete(ctx context.Context, log logr.Logger, dns *extensionsv1alpha1.DNSRecord, _ *extensionscontroller.Cluster) error {
-	// Create PowerDNS client
-	pdnsClient, err := pdns.NewClientFromSecretRef(ctx, a.client, dns.Spec.SecretRef)
+	dnsClient, err := rfc2136.NewClientFromSecretRef(ctx, a.client, dns.Spec.SecretRef)
 	if err != nil {
-		return fmt.Errorf("could not create PowerDNS client: %+v", err)
+		return fmt.Errorf("could not create dns client: %+v", err)
 	}
 
 	// Determine DNS hosted zone ID
-	zone, err := a.getZone(ctx, log, dns, pdnsClient)
+	zone, err := a.getZone(ctx, dns)
 	if err != nil {
 		return err
 	}
 
 	// Delete DNS recordset
 	log.Info("Deleting DNS recordset", "zone", zone, "name", dns.Spec.Name, "type", dns.Spec.RecordType, "values", dns.Spec.Values, "dnsrecord", kutil.ObjectName(dns))
-	if err := pdnsClient.DeleteDNSRecordSet(ctx, zone, dns.Spec.Name, powerdns.RRType(dns.Spec.RecordType)); err != nil {
+	if err := dnsClient.Delete(ctx, zone, dns.Spec.Name, string(dns.Spec.RecordType), dns.Spec.Values); err != nil {
 		return fmt.Errorf("could not delete DNS recordset in zone %s with name %s, type %s, and values %v: %w", zone, dns.Spec.Name, dns.Spec.RecordType, dns.Spec.Values, err)
 	}
 
@@ -105,7 +101,7 @@ func (a *actuator) Migrate(_ context.Context, _ logr.Logger, _ *extensionsv1alph
 	return nil
 }
 
-func (a *actuator) getZone(ctx context.Context, log logr.Logger, dns *extensionsv1alpha1.DNSRecord, pdnsClient *pdnsclient.Client) (string, error) {
+func (a *actuator) getZone(ctx context.Context, dns *extensionsv1alpha1.DNSRecord) (string, error) {
 	switch {
 	case dns.Spec.Zone != nil && *dns.Spec.Zone != "":
 		return *dns.Spec.Zone, nil
@@ -114,15 +110,11 @@ func (a *actuator) getZone(ctx context.Context, log logr.Logger, dns *extensions
 	default:
 		// The zone is not specified in the resource status or spec. Try to determine the zone by
 		// getting all hosted zones of the account and searching for the longest zone name that is a suffix of dns.spec.Name
-		zones, err := pdnsClient.GetDNSHostedZones(ctx)
+		zone, err := rfc2136client.GetZone(ctx, dns.Spec.Name)
 		if err != nil {
-			return "", fmt.Errorf("could not get DNS hosted zones: %w", err)
-		}
-		log.Info("Got DNS hosted zones", "zones", zones, "dnsrecord", kutil.ObjectName(dns))
-		zone := dnsrecord.FindZoneForName(zones, dns.Spec.Name)
-		if zone == "" {
 			return "", gardencorev1beta1helper.NewErrorWithCodes(fmt.Errorf("could not find DNS hosted zone for name %s", dns.Spec.Name), gardencorev1beta1.ErrorConfigurationProblem)
 		}
+
 		return zone, nil
 	}
 }

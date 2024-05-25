@@ -7,8 +7,8 @@ toolchain go1.22.2
 require (
 	github.com/gardener/gardener v1.76.4
 	github.com/go-logr/logr v1.4.1
-	github.com/joeig/go-powerdns/v3 v3.10.0
 	github.com/miekg/dns v1.1.59
+	github.com/pkg/errors v0.9.1
 	github.com/spf13/cobra v1.8.0
 	github.com/spf13/pflag v1.0.5
 	golang.org/x/tools v0.19.0
@@ -76,7 +76,6 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/onsi/ginkgo/v2 v2.15.0 // indirect
-	github.com/pkg/errors v0.9.1 // indirect
 	github.com/prometheus/client_golang v1.18.0 // indirect
 	github.com/prometheus/client_model v0.5.0 // indirect
 	github.com/prometheus/common v0.46.0 // indirect
