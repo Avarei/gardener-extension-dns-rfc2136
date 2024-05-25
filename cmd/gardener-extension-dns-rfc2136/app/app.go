@@ -31,7 +31,7 @@ const (
 	Name = "rfc2136"
 )
 
-// NewControllerManagerCommand creates a new command for running a PowerDNS provider controller.
+// NewControllerManagerCommand creates a new command for running a RFC2136 provider controller.
 func NewControllerManagerCommand(ctx context.Context) *cobra.Command {
 	var (
 		generalOpts = &controllercmd.GeneralOptions{}

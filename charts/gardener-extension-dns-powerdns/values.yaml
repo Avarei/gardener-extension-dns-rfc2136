@@ -1,5 +1,5 @@
 image:
-  repository: ghcr.io/metal-stack/gardener-extension-dns-powerdns
+  repository: ghcr.io/avarei/gardener-extension-dns-rfc2136
   tag: latest
   pullPolicy: Always
 

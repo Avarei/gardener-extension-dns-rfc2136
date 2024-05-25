@@ -10,6 +10,6 @@ FROM alpine:3.19
 
 WORKDIR /
 
-COPY --from=builder /go/bin/gardener-extension-dns-powerdns /gardener-extension-dns-powerdns
+COPY --from=builder /go/bin/gardener-extension-dns-rfc2136 /gardener-extension-dns-rfc2136
 
-CMD ["/gardener-extension-dns-powerdns"]
+CMD ["/gardener-extension-dns-rfc2136"]

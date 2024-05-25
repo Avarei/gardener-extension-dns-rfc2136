@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 IMAGE_TAG                   := $(or ${GITHUB_TAG_NAME}, latest)
-REGISTRY                    := ghcr.io/metal-stack
+REGISTRY                    := ghcr.io/avarei
 IMAGE_PREFIX                := $(REGISTRY)
 REPO_ROOT                   := $(shell dirname "$(realpath $(lastword $(MAKEFILE_LIST)))")
 HACK_DIR                    := $(REPO_ROOT)/hack
@@ -34,7 +34,7 @@ TOOLS_DIR := hack/tools
 
 .PHONY: build
 build:
-	go build -ldflags $(LD_FLAGS) -tags netgo ./cmd/gardener-extension-dns-powerdns
+	go build -ldflags $(LD_FLAGS) -tags netgo ./cmd/gardener-extension-dns-rfc2136
 
 .PHONY: install
 install: revendor $(HELM)
@@ -44,12 +44,12 @@ install: revendor $(HELM)
 .PHONY: docker-image
 docker-image:
 	@docker build --no-cache \
-		--tag $(IMAGE_PREFIX)/gardener-extension-dns-powerdns:$(IMAGE_TAG) \
+		--tag $(IMAGE_PREFIX)/gardener-extension-dns-rfc2136:$(IMAGE_TAG) \
 		--file Dockerfile --memory 6g .
 
 .PHONY: docker-push
 docker-push:
-	@docker push $(IMAGE_PREFIX)/gardener-extension-dns-powerdns:$(IMAGE_TAG)
+	@docker push $(IMAGE_PREFIX)/gardener-extension-dns-rfc2136:$(IMAGE_TAG)
 
 #####################################################################
 # Rules for verification, formatting, linting, testing and cleaning #

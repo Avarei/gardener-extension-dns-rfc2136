@@ -1,5 +1,5 @@
 apiVersion: v1
 appVersion: "1.0"
-description: A Helm chart for the Gardener PowerDNS extension
-name: gardener-extension-dns-powerdns
+description: A Helm chart for the Gardener DNS RFC2136 extension
+name: gardener-extension-dns-rfc2136
 version: 0.1.0

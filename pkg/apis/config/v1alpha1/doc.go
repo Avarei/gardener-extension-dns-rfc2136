@@ -8,6 +8,6 @@
 // +k8s:openapi-gen=true
 // +k8s:defaulter-gen=TypeMeta
 
-// Package v1alpha1 contains the PowerDNS provider configuration API resources.
-// +groupName=powerdns.dns.extensions.config.gardener.cloud
+// Package v1alpha1 contains the RFC2136 provider configuration API resources.
+// +groupName=rfc2136.dns.extensions.config.gardener.cloud
 package v1alpha1 // import "github.com/avarei/gardener-extension-dns-rfc2136/pkg/apis/config/v1alpha1"

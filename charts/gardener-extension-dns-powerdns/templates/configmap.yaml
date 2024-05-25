@@ -8,7 +8,7 @@ metadata:
 data:
   config.yaml: |
     ---
-    apiVersion: powerdns.dns.extensions.config.gardener.cloud/v1alpha1
+    apiVersion: rfc2136.dns.extensions.config.gardener.cloud/v1alpha1
     kind: ControllerConfiguration
 {{- if .Values.config.clientConnection }}
     clientConnection:

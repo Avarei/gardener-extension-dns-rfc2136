@@ -13,7 +13,7 @@ import (
 // +genclient
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
 
-// ControllerConfiguration defines the configuration for the PowerDNS provider.
+// ControllerConfiguration defines the configuration for the RFC2136 provider.
 type ControllerConfiguration struct {
 	metav1.TypeMeta `json:",inline"`
 

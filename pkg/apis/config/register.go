@@ -11,7 +11,7 @@ import (
 )
 
 // GroupName is the group name use in this package
-const GroupName = "powerdns.dns.extensions.config.gardener.cloud"
+const GroupName = "rfc2136.dns.extensions.config.gardener.cloud"
 
 // SchemeGroupVersion is group version used to register these objects
 var SchemeGroupVersion = schema.GroupVersion{Group: GroupName, Version: runtime.APIVersionInternal}

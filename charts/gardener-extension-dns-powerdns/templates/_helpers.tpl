@@ -1,5 +1,5 @@
 {{- define "name" -}}
-gardener-extension-dns-powerdns
+gardener-extension-dns-rfc2136
 {{- end -}}
 
 {{- define "labels.app.key" -}}

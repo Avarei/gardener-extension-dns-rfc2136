@@ -49,7 +49,7 @@ rules:
   resources:
   - leases
   resourceNames:
-  - dns-powerdns-leader-election
+  - dns-rfc2136-leader-election
   - gardener-extension-heartbeat
   verbs:
   - get
