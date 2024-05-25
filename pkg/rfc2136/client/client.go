@@ -11,13 +11,6 @@ import (
 	"github.com/pkg/errors"
 )
 
-type RecordHandler interface {
-	CreateOrUpdate()
-	Delete()
-	Get()
-	List()
-}
-
 // Client contains configuration and provides functions that use said configuration for the creation of RFC2136 records.
 type Client struct {
 	Server        *string
@@ -95,6 +88,10 @@ func getSOARecord(ctx context.Context, zone string) (*dns.SOA, error) {
 	m.RecursionDesired = true
 	c := new(dns.Client)
 	config, err := dns.ClientConfigFromFile("/etc/resolv.conf")
+	if err != nil {
+		return nil, errors.Wrap(err, "error evaluating /etc/resolv.conf")
+	}
+
 	server := config.Servers[0] + ":" + config.Port
 	r, _, err := c.ExchangeContext(ctx, m, server)
 	if err != nil {
