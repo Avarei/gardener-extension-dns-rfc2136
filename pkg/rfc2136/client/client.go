@@ -34,8 +34,8 @@ func (c *Client) CreateOrUpdate(ctx context.Context, zone, name string, recordTy
 	rr := createRRs(name, dns.StringToType[string(recordType)], value, uint32(ttl))
 
 	msg := new(dns.Msg)
-	msg.Insert(rr)
 	msg.SetUpdate(zone)
+	msg.Insert(rr)
 	msg.SetTsig(c.TsigKeyName, c.TsigAlgorithm, 300, time.Now().Unix())
 	client := new(dns.Client)
 	client.TsigSecret = map[string]string{c.TsigKeyName: c.TsigSecret}
