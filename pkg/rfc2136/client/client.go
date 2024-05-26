@@ -31,6 +31,9 @@ func NewClient(tsigKeyName, tsigSecret, tsigAlgorithm string, server *string) *C
 
 // CreateOrUpdate an A, AAAA, CNAME, or TXT record
 func (c *Client) CreateOrUpdate(ctx context.Context, zone, name string, recordType string, value []string, ttl int64) error {
+	zone = dns.Fqdn(zone)
+	name = dns.Fqdn(name)
+
 	rr := createRRs(name, dns.StringToType[string(recordType)], value, uint32(ttl))
 
 	msg := new(dns.Msg)
@@ -70,11 +73,12 @@ func (c *Client) getDNSServer(ctx context.Context, zone string) (string, error) 
 // GetZone attempts to read the SOA Record of fqdn reducing shortening the domain
 // by one lever with each unsuccessfull iteration
 func GetZone(ctx context.Context, fqdn string) (string, error) {
-	var soa *dns.SOA
-	var err error
-	splitDomain := strings.Split(fqdn, ".")
-	for i := 0; i < len(splitDomain); i++ {
-		soa, err = getSOARecord(ctx, strings.Join(splitDomain[i:], "."))
+	fqdn = dns.Fqdn(fqdn)
+
+	labels := strings.Split(fqdn, ".")[:1]
+	for i := 0; i < len(labels); i++ {
+		parentFqdn := strings.Join(labels[i:], ".") + "."
+		soa, err := getSOARecord(ctx, parentFqdn)
 		if err == nil {
 			return soa.Ns, nil
 		}
@@ -83,8 +87,10 @@ func GetZone(ctx context.Context, fqdn string) (string, error) {
 }
 
 func getSOARecord(ctx context.Context, zone string) (*dns.SOA, error) {
+	zone = dns.Fqdn(zone)
+
 	m := new(dns.Msg)
-	m.SetQuestion(dns.Fqdn(zone), dns.TypeSOA)
+	m.SetQuestion(zone, dns.TypeSOA)
 	m.RecursionDesired = true
 	c := new(dns.Client)
 	config, err := dns.ClientConfigFromFile("/etc/resolv.conf")
@@ -99,12 +105,9 @@ func getSOARecord(ctx context.Context, zone string) (*dns.SOA, error) {
 		return nil, fmt.Errorf("SOA query for %s at %s failed", zone, server)
 	}
 
-	// Check for response
 	if r.Rcode != dns.RcodeSuccess {
 		return nil, fmt.Errorf("SOA record for %s could not be found by %s", zone, server)
 	}
-
-	// Print the answer section
 
 	for _, rr := range r.Answer {
 		if soa, ok := rr.(*dns.SOA); ok {
@@ -115,6 +118,7 @@ func getSOARecord(ctx context.Context, zone string) (*dns.SOA, error) {
 }
 
 func createRRs(name string, recordType uint16, value []string, ttl uint32) []dns.RR {
+	name = dns.Fqdn(name)
 	var rr []dns.RR
 
 	switch recordType {
@@ -122,7 +126,7 @@ func createRRs(name string, recordType uint16, value []string, ttl uint32) []dns
 		for _, content := range value {
 			rr = append(rr, &dns.A{
 				Hdr: dns.RR_Header{
-					Name:   dns.Fqdn(name),
+					Name:   name,
 					Rrtype: dns.TypeA,
 					Class:  dns.ClassINET,
 					Ttl:    ttl,
@@ -134,7 +138,7 @@ func createRRs(name string, recordType uint16, value []string, ttl uint32) []dns
 		for _, content := range value {
 			rr = append(rr, &dns.AAAA{
 				Hdr: dns.RR_Header{
-					Name:   dns.Fqdn(name),
+					Name:   name,
 					Rrtype: dns.TypeAAAA,
 					Class:  dns.ClassINET,
 					Ttl:    ttl,
@@ -145,7 +149,7 @@ func createRRs(name string, recordType uint16, value []string, ttl uint32) []dns
 	case dns.TypeCNAME:
 		rr = append(rr, &dns.CNAME{
 			Hdr: dns.RR_Header{
-				Name:   dns.Fqdn(name),
+				Name:   name,
 				Rrtype: dns.TypeCNAME,
 				Class:  dns.ClassINET,
 				Ttl:    ttl,
@@ -155,7 +159,7 @@ func createRRs(name string, recordType uint16, value []string, ttl uint32) []dns
 	case dns.TypeTXT:
 		rr = append(rr, &dns.TXT{
 			Hdr: dns.RR_Header{
-				Name:   dns.Fqdn(name),
+				Name:   name,
 				Rrtype: dns.TypeTXT,
 				Class:  dns.ClassINET,
 				Ttl:    ttl,
@@ -170,6 +174,9 @@ func createRRs(name string, recordType uint16, value []string, ttl uint32) []dns
 
 // Delete removes the given DNS Record
 func (c *Client) Delete(ctx context.Context, zone, name string, recordType string, value []string) error {
+	zone = dns.Fqdn(zone)
+	name = dns.Fqdn(name)
+
 	rr := createRRs(name, dns.StringToType[string(recordType)], value, 0)
 
 	server, err := c.getDNSServer(ctx, zone)
